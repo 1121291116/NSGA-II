@@ -21,7 +21,7 @@ public class Main {
 		/**
 		 * Java 输出文件地址设置
 		 */
-		String outFilePath = "data/output/irisEliteOut.data";	// 输出数据文件地址赋值
+		String outFilePath = "data/output/testTT.data";	// 输出数据文件地址赋值
 		String filePath = "data/Iris set/Iris.data";
 		//        String filePath = "data/Wine set/Wine.data"; //exchange with the upper line! geneSize in Individual to go!
 		//        String filePath = "data/test/DBscanTest.data";
@@ -37,7 +37,7 @@ public class Main {
 		System.out.println("Data set size is:"+dataSetSize);
 
 		/**
-		 * 计算距离矩阵
+		 * 初始化拥挤度矩阵
 		 */
 		disMatrix = new Double[dataSetSize][dataSetSize];		// 构建距离矩阵，分配内存
 		for (int i = 0; i < dataSetSize; i++) {					// 初始化距离矩阵
@@ -56,10 +56,9 @@ public class Main {
 		 * 种群对象生成及合并
 		 */
 		Population population = new Population(true);			// 生成种群对象
-		System.out.println("Initialize, successful");
 		population.eliteInjection(elitePath); //inject elite individual		种群重组，再插入精英个体
 		System.out.println("new population complete!");
-
+		System.out.println("Initialize, successful");			// NSGA2 种群生成要先进行一边交叉/变异/重组，这里只用了重组
 		/**
 		 * 算法对象生成及算法应用
 		 */

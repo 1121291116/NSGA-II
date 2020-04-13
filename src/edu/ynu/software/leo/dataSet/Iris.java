@@ -6,9 +6,9 @@ package edu.ynu.software.leo.dataSet;
 public class Iris {
     /**
      * Attribute Information:
-     * 1. sepal length in cm
+     * 1. sepal length in cm	萼片长度
      * 2. sepal width in cm
-     * 3. petal length in cm
+     * 3. petal length in cm	花瓣长度
      * 4. petal width in cm
      * 5. class:
      -- Iris Setosa

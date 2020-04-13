@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by maxleo on 17-11-2.
+ * 这个NSGA2 用于聚类，类似于k-means方法
  */
 public class Main {
 	public static List<Iris> dataSet;							// 数据集声明
@@ -26,7 +27,7 @@ public class Main {
 		//        String filePath = "data/test/DBscanTest.data";
 		String elitePath = "data/Elite gene/elite.data";		// 输出精英路径地址赋值
 		System.out.println("Initial done!");
-		
+
 		/**
 		 * 数据读取
 		 */
@@ -34,7 +35,7 @@ public class Main {
 		System.out.println("Read data, successful.");
 		Integer dataSetSize = dataSet.size();					// 数据规模
 		System.out.println("Data set size is:"+dataSetSize);
-		
+
 		/**
 		 * 计算距离矩阵
 		 */
@@ -58,7 +59,7 @@ public class Main {
 		System.out.println("Initialize, successful");
 		population.eliteInjection(elitePath); //inject elite individual		种群重组，再插入精英个体
 		System.out.println("new population complete!");
-		
+
 		/**
 		 * 算法对象生成及算法应用
 		 */
@@ -77,26 +78,31 @@ public class Main {
 		System.out.println("Output complete!");
 	}
 
+	/**
+	 * 部分函数注释，1.Iris数据读取
+	 * @param fileName
+	 * @return 一个列表
+	 */
 	public static List<Iris> readIrisData(String fileName) {
 		File file = new File(fileName);								// 生成一个文件对象
 		BufferedReader reader = null;
-		List<Iris> irisData = new ArrayList<>();
+		List<Iris> irisData = new ArrayList<>();					// 列表返回对象构建
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			reader = new BufferedReader(new FileReader(file));		// 文件读取对象构建
 			String tempString = null;
 			int line = 1;
-			while ((tempString = reader.readLine()) != null) {
+			while ((tempString = reader.readLine()) != null) {		// 只要读取行不为空，则一直循环
 				// 显示行号
-				String[] temp = tempString.split(",");
-				Iris iris = new Iris();
-				iris.sepalL = Double.parseDouble(temp[0]);
+				String[] temp = tempString.split(",");				// 将行内容按","分割，并存储相关数据
+				Iris iris = new Iris();								// 构建Iris对象
+				iris.sepalL = Double.parseDouble(temp[0]);			// 把字符串对象转换为Double类型
 				iris.sepalW = Double.parseDouble(temp[1]);
 				iris.petalL = Double.parseDouble(temp[2]);
 				iris.petalW = Double.parseDouble(temp[3]);
 				iris.type = temp[4];
 				irisData.add(iris);
 			}
-			reader.close();
+			reader.close();											// 文件读取关闭防止资源泄露
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -112,61 +118,20 @@ public class Main {
 		return irisData;
 	}
 
-	//    public static List<Iris> readIrisData(String fileName) {
-	//        File file = new File(fileName);
-	//        BufferedReader reader = null;
-	//        List<Iris> IrisData = new ArrayList<>();
-	//        try {
-	//            reader = new BufferedReader(new FileReader(file));
-	//            String tempString = null;
-	//            int line = 1;
-	//            while ((tempString = reader.readLine()) != null) {
-	//                // 显示行号
-	//                String[] temp = tempString.split(",");
-	//                Iris Iris = new Iris();
-	//                Iris.type = temp[0];
-	//                Iris.Alcohol = Double.parseDouble(temp[1]);
-	//                Iris.Malic = Double.parseDouble(temp[2]);
-	//                Iris.Ash = Double.parseDouble(temp[3]);
-	//                Iris.Alcalinity = Double.parseDouble(temp[4]);
-	//                Iris.Magnesium = Double.parseDouble(temp[5]);
-	//                Iris.phenols = Double.parseDouble(temp[6]);
-	//                Iris.Flavanoids = Double.parseDouble(temp[7]);
-	//                Iris.Nonflavanoid = Double.parseDouble(temp[8]);
-	//                Iris.Proanthocyanins = Double.parseDouble(temp[9]);
-	//                Iris.Color = Double.parseDouble(temp[10]);
-	//                Iris.Hue = Double.parseDouble(temp[11]);
-	//                Iris.diluted = Double.parseDouble(temp[12]);
-	//                Iris.Proline = Double.parseDouble(temp[13]);
-	//
-	//                IrisData.add(Iris);
-	//            }
-	//            reader.close();
-	//        } catch (IOException e) {
-	//            e.printStackTrace();
-	//        } finally {
-	//            if (reader != null) {
-	//                try {
-	//                    reader.close();
-	//                } catch (IOException e1) {
-	//                    e1.printStackTrace();
-	//
-	//                }
-	//            }
-	//        }
-	//        return IrisData;
-	//    }
-
-
-
+	/**
+	 * 文件输出函数
+	 * @param population
+	 * @param filePath
+	 * @param iterationNum
+	 */
 	public static void fileOutput(Population population, String filePath, Integer iterationNum) {
 		try {
-			PrintWriter pw = new PrintWriter(new FileWriter(filePath));
+			PrintWriter pw = new PrintWriter(new FileWriter(filePath));			// 打印对象构建
 			pw.println("Population size: "+population.size()+"; Iteration times:"+iterationNum+";");
 			pw.println();
-			for (int i = 0; i < population.size(); i++) {
+			for (int i = 0; i < population.size(); i++) {						// 打印种群的每一代
 				pw.println("-----------solution "+i+"-----------");
-				Individual individual = population.individualList.get(i);
+				Individual individual = population.individualList.get(i);		// 获得种群染色体个体
 				pw.println("Rank:"+individual.rank+"; Cluster number:"+individual.clusterCount+"; Adapt values:"+ -individual.adaptiveValues.get(0)+" "+individual.adaptiveValues.get(1)+" "+individual.adaptiveValues.get(2));
 				for (int j = 0; j < individual.gene.size(); j++) {
 					pw.println(j+"\t"+individual.gene.get(j));

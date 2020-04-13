@@ -51,43 +51,30 @@ public class Main {
 		}
 		System.out.println("Distance calculation complete!");
 
-		//check file input
-		//        for (int i = 0; i < dataSet.size(); i++) {
-		//            System.out.println("["+i+"]"+dataSet.get(i).sepalL+","+dataSet.get(i).sepalW+","+dataSet.get(i).petalL+","+dataSet.get(i).petalW+","+dataSet.get(i).type);
-		//        }
-
+		/**
+		 * 种群对象生成及合并
+		 */
 		Population population = new Population(true);			// 生成种群对象
+		System.out.println("Initialize, successful");
 		population.eliteInjection(elitePath); //inject elite individual		种群重组，再插入精英个体
 		System.out.println("new population complete!");
+		
+		/**
+		 * 算法对象生成及算法应用
+		 */
 		NSGA_II nsga_ii = new NSGA_II();						// 生成NSGA2算法对象
-		System.out.println("Initialize, successful");
-
 		for (int i = 0; i < iterationNum; i++) {
-			population = nsga_ii.evolution(population);
-			//-------------------Gene Guide----------------------------------------------------
-			//            if (i < 10) {
-			//                population.geneGuide();
-			//            }
-			//----------------------------------------------------------------------------------
+			population = nsga_ii.evolution(population);			// 调用算法evolution函数
 			System.out.println("Iteration "+i+" : Done.");
 			System.out.println();
 		}
 		System.out.println("Evolution complete!");
 
+		/**
+		 * 计算结果输出
+		 */
 		fileOutput(population,outFilePath,iterationNum);
 		System.out.println("Output complete!");
-
-
-		//        Individual individual = population.individualList.get(0);
-		//        System.out.println("genes are as follows:");
-		//        for (int i = 0; i < individual.gene.size(); i++) {
-		//            System.out.println(i+":"+individual.gene.get(i));
-		//        }
-		//
-		//        System.out.println("DB:"+individual.adaptiveValues.get(0));
-		//        System.out.println("DI:"+individual.adaptiveValues.get(1));
-		//        System.out.println("SC:"+individual.adaptiveValues.get(2));
-
 	}
 
 	public static List<Iris> readIrisData(String fileName) {

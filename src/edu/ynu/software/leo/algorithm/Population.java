@@ -193,19 +193,29 @@ public class Population {
 	}
 
 	/**
-	 * 计算距离，即拥挤度
+	 * 计算拥挤度，拥挤度是操作帕累托前沿集计算得来的，所以属于种群对象
 	 */
 	public void calcDistance(){
-		for (Individual ind :individualList) {
+		for (Individual ind :individualList) {			// 初始化种群拥挤度
 			ind.distance = 0.0;
 		}
-		for (int i = 0; i < Individual.objFunNum; i++) {		// 对每一个目标函数
-			individualList.sort(new adaptiveValuesComparator(i));//ascending order
-			individualList.get(0).distance = Double.MAX_VALUE/(Individual.objFunNum*10);
+		for (int i = 0; i < Individual.objFunNum; i++) {									// 按目标函数个数分别求解
+			individualList.sort(new adaptiveValuesComparator(i));							// ascending order 根据不同目标函数升序
+			individualList.get(0).distance = Double.MAX_VALUE/(Individual.objFunNum*10);	// 设置第一个和最后一个拥挤度为最大值
 			individualList.get(individualList.size()-1).distance = Double.MAX_VALUE/(Individual.objFunNum*10);
-			for (int j = 1; j < size()-1; j++) {
-				individualList.get(j).distance = individualList.get(j).distance +
-						(individualList.get(j+1).adaptiveValues.get(i) - individualList.get(j-1).adaptiveValues.get(i))/(individualList.get(individualList.size()-1).adaptiveValues.get(i) - individualList.get(0).adaptiveValues.get(i));
+			for (int j = 1; j < size()-1; j++) {											// 对第2-倒数第二个染色体计算
+				/**
+				 * 第j个染色体目标函数i的拥挤度 = 第j个染色体目标函数i-1的拥挤度 + 
+				 * 			（j+1染色体目标函数i适应度值 - j-1染色体目标函数i适应度值）/ 
+				 * 			(最后一个染色体目标i的适应度值 - 第一个染色体目标i的适应度值)
+				 * 注意：拥挤度和适应度值是两个概念，拥挤度是根据适应度值计算出来的；把第一个和最后一个染色体的拥挤度设为最大值，
+				 * 		 并不代表他们的适应度值也被修改了。因为种群已经根据相应目标函数将其适应度值进行了升序排列，所以最后一个
+				 * 		 染色体适应度值最大，第一个染色体适应度值最小。	 
+				 */
+				individualList.get(j).distance = individualList.get(j).distance +			
+						(individualList.get(j+1).adaptiveValues.get(i) - individualList.get(j-1).adaptiveValues.get(i))
+						/(individualList.get(individualList.size()-1).adaptiveValues.get(i) 
+								- individualList.get(0).adaptiveValues.get(i));
 			}
 		}
 	}

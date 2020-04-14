@@ -62,6 +62,8 @@ public class Individual {
 
 	/**
 	 * 判断当前对象是否被individual支配
+	 * 这个类中没有提供单条染色体的被支配数，但是提供了是否被支配的判断函数
+	 * 也没有提供当前染色体的支配集，但是在Population中提供了判断是否为帕累托最优解的判断函数
 	 * @param individual
 	 * @return
 	 */

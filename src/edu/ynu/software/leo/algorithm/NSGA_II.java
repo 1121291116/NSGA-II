@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 /**
  * Created by maxleo on 17-11-2.
+ * 这是NSGA的主运行过程，但是把初始种群的预处理过程没有放进来
  */
 public class NSGA_II {
 
@@ -28,7 +29,7 @@ public class NSGA_II {
                 for (int i = 0; i < difference; i++) {
                     result.individualList.add(tempPopulation.individualList.get(i));
                 }
-            }
+            } 
             newPopulation.individualList.removeAll(tempPopulation.individualList);	// 去掉pareto front
             rank++;
         }
